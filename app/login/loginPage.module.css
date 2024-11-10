@@ -29,3 +29,26 @@
 .socialButton:nth-child(3){
     background-color: #087BEA;
 }
+
+@media screen and (max-width:768px) {
+     .wrapper{
+        padding: 50px 100px;
+     }
+}
+
+@media screen and (max-width:640px) {
+    .wrapper{
+       padding: 30px;
+    }
+    .socialButton{
+        font-weight: 400;
+        font-size: 14px;
+    }
+}
+.loading{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
