@@ -1,87 +1,86 @@
-import Link from 'next/link'
-import styles from './comments.module.css'
-import Image from 'next/image'
-const Comments = () => {
-    const status ="authenticated"
+"use client";
+
+import Link from "next/link";
+import styles from "./comments.module.css";
+import Image from "next/image";
+import useSWR from "swr";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+
+const fetcher = async (url: string | URL | Request) => {
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.message);
+    }
+    return data;
+  } catch (error) {
+    return { message: "Something went wrong!" };
+  }
+};
+
+const Comments = ({ postSlug } : {postSlug:any}) => {
+  const { status } = useSession();
+  const { data, mutate,isLoading } = useSWR(
+    `http://localhost:3000/api/comments?postSlug=${postSlug}`,
+    fetcher
+  );
+  const [desc, setDesc] = useState("");
+
+  const handleSubmit = async () => {    
+    await fetch("http://localhost:3000/api/comments", {
+      method: "POST",
+      body: JSON.stringify({ desc, postSlug }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    mutate();
+    setDesc("");
+  };
   return (
     <div className={styles.container}>
-        <h1 className={styles.title}>Comments</h1>
-        {status==="authenticated" ? 
-        (<div className={styles.write}>
-            <textarea placeholder='write a comment.. ' className={styles.input}></textarea>
-            <button className={styles.button}>Send</button>
-        </div>)
-        :
-        (<Link href="/login">Login to write a comment</Link>)}
-        <div className={styles.comments}>
-            <div className={styles.comment}>
-                <div className={styles.user}>
-                    <Image src="/p1.jpeg" alt='' width={50} height={50} className={styles.iamge}/>
-                    <div className={styles.userInfo}>
-                        <span className={styles.username}>John Doe</span>
-                        <span className={styles.date}>01.01.2023</span>
-                    </div>
-                </div>
-                <p className={styles.desc}>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod, enim, quo sed
-                     asperiores aspernatur, rerum ipsa quos  minus optio dolorum doloremque error incidunt.
-                    Impedit voluptates necessitatibus consequatur tenetur dolores accusantium.
-                </p>
-            </div>
+      <h1 className={styles.title}>Comments</h1>
+      {status === "authenticated" ? (
+        <div className={styles.write}>
+          <textarea
+            placeholder="write a comment.. "
+            className={styles.input}
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+          ></textarea>
+          <button className={styles.button} onClick={handleSubmit}>Send</button>
         </div>
-
-        <div className={styles.comments}>
-            <div className={styles.comment}>
+      ) : (
+        <Link href="/login">Login to write a comment</Link>
+      )}
+      {isLoading
+        ? "loading.."
+        : data?.map((item: any) => (
+            <div className={styles.comments} key={item.id}>
+              <div className={styles.comment}>
                 <div className={styles.user}>
-                    <Image src="/p1.jpeg" alt='' width={50} height={50} className={styles.iamge}/>
-                    <div className={styles.userInfo}>
-                        <span className={styles.username}>John Doe</span>
-                        <span className={styles.date}>01.01.2023</span>
-                    </div>
+                  {item.user?.image && (
+                    <Image
+                      src={item.user.image}
+                      alt=""
+                      width={50}
+                      height={50}
+                      className={styles.iamge}
+                    />
+                  )}
+                  <div className={styles.userInfo}>
+                    <span className={styles.username}>{item.user.name}</span>
+                    <span className={styles.date}>{item.createdAt}</span>
+                  </div>
                 </div>
-                <p className={styles.desc}>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod, enim, quo sed
-                     asperiores aspernatur, rerum ipsa quos  minus optio dolorum doloremque error incidunt.
-                    Impedit voluptates necessitatibus consequatur tenetur dolores accusantium.
-                </p>
+                <p className={styles.desc}>{item.desc}</p>
+              </div>
             </div>
-        </div>
-
-        <div className={styles.comments}>
-            <div className={styles.comment}>
-                <div className={styles.user}>
-                    <Image src="/p1.jpeg" alt='' width={50} height={50} className={styles.iamge}/>
-                    <div className={styles.userInfo}>
-                        <span className={styles.username}>John Doe</span>
-                        <span className={styles.date}>01.01.2023</span>
-                    </div>
-                </div>
-                <p className={styles.desc}>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod, enim, quo sed
-                     asperiores aspernatur, rerum ipsa quos  minus optio dolorum doloremque error incidunt.
-                    Impedit voluptates necessitatibus consequatur tenetur dolores accusantium.
-                </p>
-            </div>
-        </div>
-
-        <div className={styles.comments}>
-            <div className={styles.comment}>
-                <div className={styles.user}>
-                    <Image src="/p1.jpeg" alt='' width={50} height={50} className={styles.iamge}/>
-                    <div className={styles.userInfo}>
-                        <span className={styles.username}>John Doe</span>
-                        <span className={styles.date}>01.01.2023</span>
-                    </div>
-                </div>
-                <p className={styles.desc}>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod, enim, quo sed
-                     asperiores aspernatur, rerum ipsa quos  minus optio dolorum doloremque error incidunt.
-                    Impedit voluptates necessitatibus consequatur tenetur dolores accusantium.
-                </p>
-            </div>
-        </div>
+          ))}
     </div>
-  )
-}
+  );
+};
 
-export default Comments
+export default Comments;

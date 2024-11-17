@@ -14,7 +14,9 @@ const getFromLocalStorage = () => {
     return "light"; 
 };
 
-export const ThemeContextProvider = ({ children }) => {
+import { ReactNode } from "react";
+
+export const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
     const [theme, setTheme] = useState(getFromLocalStorage);
 
     const toggle = () => {

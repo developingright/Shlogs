@@ -7,7 +7,7 @@ interface SearchParams {
   cat?: string;
 }
 
-const BlogPage = ({searchParams}: { searchParams: SearchParams }) => {
+const BlogPage = ({searchParams}: { searchParams: any }) => {
   const page = parseInt(searchParams.page || "1");
   const cat = searchParams.cat || "";
   return (

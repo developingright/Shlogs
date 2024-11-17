@@ -15,13 +15,11 @@ const getData = async (slug : String) =>{
       
       return res.json();
     }catch(error){
-      console.log(error);
       return {posts:[],count:0};
     }
   }; 
-const SinglePage = async ({params} :{params: {slug:String}}) => { 
+const SinglePage = async ({params} :{params: any}) => { 
     const data = await getData(params.slug);
-    console.log(data);
   return (
     <div className={styles.container}>
         <div className={styles.infoContainer}>
@@ -47,7 +45,7 @@ const SinglePage = async ({params} :{params: {slug:String}}) => {
             <div className={styles.post}>
                 <div className={styles.desc} dangerouslySetInnerHTML={{__html: data?.desc}}/>
                 <div className={styles.comment}>
-                    <Comments/>
+                    <Comments postSlug={params.slug}/>
                 </div>
             </div>
             <Menu/>

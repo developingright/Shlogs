@@ -3,14 +3,15 @@ import { NextResponse } from "next/server";
 
 //GETS SINGE POST
 
-export const GET = async (req: Request, { params }: { params: { slug: string } }) => {
+export const GET = async (req: Request, { params }: { params: any}) => {
     const { slug } = params;
     try {
         
-        const post = await prisma.post.findUnique({
+        const post = await prisma.post.update({
             where: {
                 slug,
             },
+            data: { views :{increment:1}},  
             include:{user:true}, 
         });
         return NextResponse.json(post, { status: 200 });
