@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
 import styles from './home.module.css';   
 import Featured from './components/featured/Featured';
 import CategoryList from './components/categoryList/CategoryList';

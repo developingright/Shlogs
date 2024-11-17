@@ -5,7 +5,7 @@ import Card from '../card/Card';
 const getData = async (page:Number,cat:String) =>{
   try{
 
-    const res = await fetch(`http://localhost:3000/api/posts?page=${page}&cat=${cat || ""}`,{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?page=${page}&cat=${cat || ""}`,{
       cache:"no-store",
     });
     
@@ -15,7 +15,6 @@ const getData = async (page:Number,cat:String) =>{
     
     return res.json();
   }catch(error){
-    console.log(error);
     return {posts:[],count:0};
   }
 }; 
@@ -25,7 +24,6 @@ const CardList = async ({page, cat}: {page: number, cat: string}) => {
   const POST_PER_PAGE = 2;
   
   const hasPrev  = (POST_PER_PAGE * (page-1)) > 0;
-  console.log(hasPrev);
   const hasNext = POST_PER_PAGE * (page-1) + POST_PER_PAGE < count;
   return (
     <div className={styles.container}>

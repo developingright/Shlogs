@@ -47,14 +47,21 @@ const WritePage = () => {
       .replace(/[^\w-]+/g, "");
   }
   const handleSubmit = async () => {  
-    const res = await fetch("http://localhost:3000/api/posts", {  
-      method: "POST",
-      body: JSON.stringify({ title: title,desc: value, img: fileUrl , slug: slugify(title),catSlug: catSlug}),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(res);
+    try{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {  
+        method: "POST",
+        body: JSON.stringify({ title: title,desc: value, img: fileUrl , slug: slugify(title),catSlug: catSlug}),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(res);
+    }catch(error){
+      console.log(error);
+    }finally{
+      router.push("/posts/"+slugify(title));
+    }
+   
   }
 
   return (<>{
