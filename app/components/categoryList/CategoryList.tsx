@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const getData = async () =>{
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`,{
+  const res = await fetch(`https://shlogs.vercel.app/api/categories`,{
     cache:"no-store",
   });
 

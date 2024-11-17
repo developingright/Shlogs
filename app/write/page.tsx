@@ -48,7 +48,7 @@ const WritePage = () => {
   }
   const handleSubmit = async () => {  
     try{
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {  
+      const res = await fetch(`https://shlogs.vercel.app/api/posts`, {  
         method: "POST",
         body: JSON.stringify({ title: title,desc: value, img: fileUrl , slug: slugify(title),catSlug: catSlug}),
         headers: {

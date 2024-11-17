@@ -5,7 +5,7 @@ import Card from '../card/Card';
 const getData = async (page:Number,cat:String) =>{
   try{
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?page=${page}&cat=${cat || ""}`,{
+    const res = await fetch(`https://shlogs.vercel.app/api/posts?page=${page}&cat=${cat || ""}`,{
       cache:"no-store",
     });
     

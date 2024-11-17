@@ -29,7 +29,7 @@ const Comments = ({ postSlug } : {postSlug:any}) => {
   const [desc, setDesc] = useState("");
 
   const handleSubmit = async () => {    
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/comments`, {
+    await fetch(`https://shlogs.vercel.app/api/comments`, {
       method: "POST",
       body: JSON.stringify({ desc, postSlug }),
       headers: {
